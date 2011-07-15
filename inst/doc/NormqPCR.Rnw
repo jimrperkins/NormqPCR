@@ -1,0 +1,526 @@
+%\VignetteIndexEntry{NormqPCR: Functions for normalisation of RT-qPCR data}
+%\VignetteDepends{stats,RColorBrewer,Biobase,methods,ReadqPCR}
+%\VignetteKeywords{real-time, quantitative, PCR, housekeeper, reference gene,geNorm, NormFinder}
+%\VignettePackage{NormqPCR}
+%
+\documentclass[11pt]{article}
+\usepackage{geometry}\usepackage{color}
+\definecolor{darkblue}{rgb}{0.0,0.0,0.75}
+\usepackage[%
+baseurl={http://qpcr.r-forge.r-project.org/},%
+pdftitle={NormqPCR: Functions for normalisation of RT-qPCR data},%
+pdfauthor={Matthias Kohl and James Perkins},%
+pdfsubject={NormqPCR},%
+pdfkeywords={real-time, quantitative, PCR, housekeeper, reference gene, geNorm,
+NormFinder},%
+pagebackref,bookmarks,colorlinks,linkcolor=darkblue,citecolor=darkblue,%
+pagecolor=darkblue,raiselinks,plainpages,pdftex]{hyperref}
+%
+\markboth{\sl Package ``{\tt NormqPCR}''}{\sl Package ``{\tt NormqPCR}''}
+%
+%------------------------------------------------------------------------------
+\newcommand{\code}[1]{{\tt #1}}
+\newcommand{\pkg}[1]{{\tt "#1"}}
+\newcommand{\myinfig}[2]{%
+%  \begin{figure}[htbp]
+    \begin{center}
+      \includegraphics[width = #1\textwidth]{#2}
+%      \caption{\label{#1}#3}
+    \end{center}
+%  \end{figure}
+}
+%------------------------------------------------------------------------------
+%
+%------------------------------------------------------------------------------
+\begin{document}
+
+\SweaveOpts{keep.source = TRUE, eval = TRUE, include = FALSE}
+%-------------------------------------------------------------------------------
+\title{NormqPCR: Functions for normalisation of RT-qPCR data}
+%-------------------------------------------------------------------------------
+\author{James Perkins and Matthias Kohl\\ 
+University College London (UK) / Jena University Hospital (Germany)\medskip\\
+}
+\maketitle
+\tableofcontents
+%-------------------------------------------------------------------------------
+\section{Introduction}
+%-------------------------------------------------------------------------------
+The package \pkg{NormqPCR} provides methods for the normalization of 
+real-time quantitative RT-PCR data. In this vignette we describe and 
+demonstrate the available functions. 
+Firstly we show
+how the user may combine technical replicates, deal with undetermined values
+and deal with values above a user-chosen threshold. The rest of the vignette is split into
+two distinct sections, the first giving details of different methods to select
+the best houskeeping gene/genes for normalisation, and the second showing how to
+use the selected housekeeping gene(s) to produce $2^{-\Delta Ct}$ normalised
+estimators and $2^{-\Delta \Delta Ct}$ estimators of differential expression.
+%-------------------------------------------------------------------------------
+\section{Combining technical replicates} 
+%-------------------------------------------------------------------------------
+When a raw data file read in using read.qPCR contains technical replicates,
+they are dealt with by concatenating the suffix \_TechRep.n to the detector
+name, where
+n in {1, 2...N } is the number of the replication in the total number of
+replicates, N, based
+on order of appearence in the qPCR data file.
+
+So if we read in a file with technical replicates, we can see that the
+detector/feature names are thus suffixed:
+
+<<read.qPCR.tech.reps>>=
+library(ReadqPCR) # load the ReadqPCR library
+library(NormqPCR)
+path <- system.file("exData", package = "NormqPCR")
+qPCR.example.techReps <- file.path(path, "qPCR.techReps.txt")
+qPCRBatch.qPCR.techReps <- read.qPCR(qPCR.example.techReps)
+rownames(exprs(qPCRBatch.qPCR.techReps))[1:8]
+@
+
+It is likely that before continuing with the analysis, the user would wish to
+average the technical replicates by using the arithmetic mean of the raw Ct values. This can be
+achieved using the combineTechReps function, which will produce a new qPCRBatch
+object, with all tech reps reduced to one reading:
+
+<<combine read.qPCR.tech.reps>>=
+combinedTechReps <- combineTechReps(qPCRBatch.qPCR.techReps)
+combinedTechReps
+@
+
+%-------------------------------------------------------------------------------
+\section{Dealing with undetermined values} 
+%-------------------------------------------------------------------------------
+
+When an RT-qPCR experiment does not produce a reading after a certain number of
+cycles (the cycle threshold), the reading is given as undetermined. These are
+represented in qPCRBatch objects as \code{NA}. Different users may have different
+ideas about how many cycles they wish to allow before declaring a detector as
+not present in the sample. There are two methods for the user to decide what to
+do with numbers above a given cycle threshold:
+
+First the user might decide that anything above 38 cycles means there is nothing
+present in their sample, instead of the standard 40 used by the taqman software.
+They can replace the value of all readings above 38 as NA using the following:
+
+
+Firstly read in the taqman example file which has 96
+detectors, with 4 replicates for mia (case) and 4 non-mia (control):
+<<taqman read>>=
+path <- system.file("exData", package = "NormqPCR")
+taqman.example <- file.path(path, "/example.txt")
+qPCRBatch.taqman <- read.taqman(taqman.example)
+@
+
+We can see that for the detector: \code{Ccl20.Rn00570287\_m1} we have these readings for
+the different samples:
+<<taqman detector example>>=
+exprs(qPCRBatch.taqman)["Ccl20.Rn00570287_m1",]
+@
+
+
+We can now use the \code{replaceAboveCutOff} method in order to replace anything above
+35 with NA:
+
+<<replace above cutoff>>=
+qPCRBatch.taqman.replaced <- replaceAboveCutOff(qPCRBatch.taqman, newVal = NA,
+cutOff = 35)
+exprs(qPCRBatch.taqman.replaced)["Ccl20.Rn00570287_m1",]
+@
+
+It may also be the case that the user wants to get rid of all NA values, and
+replace them with an arbitrary number. This can be done using the
+\code{replaceNAs} method. So if the user wanted to replace all NAs with  40, it
+can be done as follows:
+
+<<replace NAs with 40>>=
+qPCRBatch.taqman.replaced <- replaceNAs(qPCRBatch.taqman, newNA = 40)
+exprs(qPCRBatch.taqman.replaced)["Ccl20.Rn00570287_m1",]
+@
+In addition, the situation sometimes arises where some readings for a given
+detector are above a given cycle threshold, but some others are not. The user
+may decide for example that if a given number of readings are NAs, then all of
+the readings for this detector should be NAs. This is important because
+otherwise an unusual reading for one detector might lead to an inaccurate
+estimate for the expression of a given gene. 
+
+This process will necessarily be separate for the different sample types, since
+you might expect a given gene to show expression in one sample type compared to
+another. Therefore it is necessary to designate the replicates per sample type
+using a contrast matrix. It is also necessary to make a sampleMaxMatrix which
+gives a maximum number of NAs allowed for each sample type.
+
+So in the example file above we two sample types, with 4 biological replicates
+for each, the contrastMatrix and sampleMaxMatrix might be contructed like this:
+
+<<construct contrast matrix>>=
+sampleNames(qPCRBatch.taqman)
+a <- c(0,0,1,1,0,0,1,1) # one for each sample type, with 1 representing
+b <- c(1,1,0,0,1,1,0,0) # position of sample type in the samplenames vector 
+contM <- cbind(a,b)
+colnames(contM) <- c("case","control") # then give the names of each sample type
+rownames(contM) <- sampleNames(qPCRBatch.taqman) # and the rows of the matrix
+contM
+sMaxM <- t(as.matrix(c(3,3))) # now make the contrast matrix
+colnames(sMaxM) <- c("case","control") # make sure these line up with samples
+sMaxM
+@
+
+More details on contrast matrices can be found in the limma manual, which requires a similar matrix when testing for differential expression between samples.
+
+For example, if the user decides that if at least 3 out of 4 readings are NAs
+for a given detector, then all readings should be NA, they can do the
+following, using the \code{makeAllNAs} method:
+
+<<replace 3 or more NAs with all NAs>>=
+qPCRBatch.taqman.replaced <- makeAllNAs(qPCRBatch.taqman, contM, sMaxM)
+@
+
+Here you can see for the Ccl20.Rn00570287\_m1 detector, the control values have
+been made all NA, wheras before 3 were NA and one was 35. However the case
+values have been kept, since they were all below the NA threshold. It is
+important to filter the data in this way to ensure the correct calculations are
+made downstream when calculating variation and other parameters.
+
+<< ccl20 is now all NAs >>=
+exprs(qPCRBatch.taqman.replaced)["Ccl20.Rn00570287_m1",]
+@
+
+%-------------------------------------------------------------------------------
+\section{Selection of most stable reference/housekeeping genes}
+%-------------------------------------------------------------------------------
+This section contains two subsections containing different methods for the
+selection of appropriate housekeeping genes.
+
+%-------------------------------------------------------------------------------
+\subsection{geNorm} 
+%-------------------------------------------------------------------------------
+We describe the selection of the best (most stable) reference/housekeeping
+genes 
+using the method of Vandesompele et al (2002)~\cite{geNorm} (in the sequel:
+Vand02)
+which is called {\it geNorm}. We first load the package and the data
+<<NormqPCR>>=
+options(width = 68)
+data(geNorm)
+str(exprs(geNorm.qPCRBatch))
+@
+We start by ranking the selected reference/housekeeping genes. The geNorm
+algorithm implemented in function \code{selectHKs} proceeds stepwise; confer 
+Section ``Materials and methods'' in Vand02. That is, the gene stability 
+measure~M of all candidate genes is computed and the gene with the highest 
+M~value is excluded. Then, the gene stability measure~M for the remaining gene 
+is calculated and so on. This procedure is repeated until two respectively, 
+\code{minNrHK} genes remain.
+<<geNorm>>=
+
+tissue <- as.factor(c(rep("BM", 9),  rep("FIB", 20), rep("LEU", 13),
+                    rep("NB", 34), rep("POOL", 9)))
+res.BM <- selectHKs(geNorm.qPCRBatch[,tissue == "BM"], method = "geNorm", 
+                    Symbols = featureNames(geNorm.qPCRBatch), minNrHK = 2, log = FALSE)
+res.POOL <- selectHKs(geNorm.qPCRBatch[,tissue == "POOL"], method = "geNorm", 
+                      Symbols = featureNames(geNorm.qPCRBatch), minNrHK = 2, 
+                      trace = FALSE, log = FALSE)
+res.FIB <- selectHKs(geNorm.qPCRBatch[,tissue == "FIB"], method = "geNorm", 
+                     Symbols = featureNames(geNorm.qPCRBatch), minNrHK = 2, 
+                     trace = FALSE, log = FALSE)
+res.LEU <- selectHKs(geNorm.qPCRBatch[,tissue == "LEU"], method = "geNorm", 
+                     Symbols = featureNames(geNorm.qPCRBatch), minNrHK = 2, 
+                     trace = FALSE, log = FALSE)
+res.NB <- selectHKs(geNorm.qPCRBatch[,tissue == "NB"], method = "geNorm", 
+                    Symbols = featureNames(geNorm.qPCRBatch), minNrHK = 2, 
+                    trace = FALSE, log = FALSE)
+@
+We obtain the following ranking of genes (cf. Table~3 in Vand02)
+<<table3, eval = TRUE>>=
+ranks <- data.frame(c(1, 1:9), res.BM$ranking, res.POOL$ranking, 
+                    res.FIB$ranking, res.LEU$ranking, 
+                    res.NB$ranking)
+names(ranks) <- c("rank", "BM", "POOL", "FIB", "LEU", "NB")
+ranks
+@
+{\bf Remark 1:}\\
+Since the computation is based on gene ratios, the two most stable
+control genes in each cell type cannot be ranked.
+
+We plot the average expression stability M for each cell type 
+(cf. Figure~2 in Vand02).
+<<fig2, fig = TRUE>>=
+library(RColorBrewer)
+mypalette <- brewer.pal(5, "Set1")
+matplot(cbind(res.BM$meanM, res.POOL$meanM, res.FIB$meanM, 
+              res.LEU$meanM, res.NB$meanM), type = "b", 
+        ylab = "Average expression stability M", 
+        xlab = "Number of remaining control genes", 
+        axes = FALSE, pch = 19, col = mypalette, 
+        ylim = c(0.2, 1.22), lty = 1, lwd = 2, 
+        main = "Figure 2 in Vandesompele et al. (2002)")
+axis(1, at = 1:9, labels = as.character(10:2))
+axis(2, at = seq(0.2, 1.2, by = 0.2), labels = seq(0.2, 1.2, by = 0.2))
+box()
+abline(h = seq(0.2, 1.2, by = 0.2), lty = 2, lwd = 1, col = "grey")
+legend("topright", legend = c("BM", "POOL", "FIB", "LEU", "NB"), 
+       fill = mypalette)
+@
+\myinfig{1}{NormqPCR-fig2.pdf}
+\par
+Second, we plot the pairwise variation for each cell type (cf. Figure~3~(a) in
+Vand02)
+<<fig3a, fig = TRUE>>=
+mypalette <- brewer.pal(8, "YlGnBu")
+barplot(cbind(res.POOL$variation, res.LEU$variation, res.NB$variation, 
+              res.FIB$variation, res.BM$variation), beside = TRUE, 
+        col = mypalette, space = c(0, 2), 
+        names.arg = c("POOL", "LEU", "NB", "FIB", "BM"),
+        ylab = "Pairwise variation V",
+        main = "Figure 3(a) in Vandesompele et al. (2002)")
+legend("topright", legend = c("V9/10", "V8/9", "V7/8", "V6/7", 
+                              "V5/6", "V4/5", "V3/4", "V2/3"), 
+       fill = mypalette, ncol = 2)
+abline(h = seq(0.05, 0.25, by = 0.05), lty = 2, col = "grey")
+abline(h = 0.15, lty = 1, col = "black")
+@
+\myinfig{1}{NormqPCR-fig3a.pdf}
+\par\noindent
+{\bf Remark 2:}\\
+Vand02 recommend a cut-off value of 0.15 for the pairwise variation. Below this
+bound the inclusion of an additional housekeeping gene is not required. 
+%-------------------------------------------------------------------------------
+\subsection{NormFinder}
+%-------------------------------------------------------------------------------
+The second method for selection reference/housekeeping genes implemented in 
+package is the method derived by \cite{NormFinder} (in the sequel: And04)
+called 
+{\it NormFinder}.\\
+The ranking contained in Table~3 of And04 can be obtained via
+<<NormFinder>>=
+data(Colon)
+str(exprs(Colon.qPCRBatch))
+group <- pData(Colon.qPCRBatch)[,"Group"]
+res.Colon <- stabMeasureRho(Colon.qPCRBatch, group = group,
+                            log = FALSE)
+sort(res.Colon) # cf. Table 3 in Andersen et al (2004)
+
+data(Bladder)
+str(exprs(Bladder.qPCRBatch))
+group <- pData(Bladder.qPCRBatch)[,"Group"]
+cat("test1")
+res.Bladder <- stabMeasureRho(Bladder.qPCRBatch, group = group,
+                              log = FALSE)
+cat("test test")
+sort(res.Bladder)
+@
+Of course, we can also reproduce the geNorm ranking also included in Table~3
+of And04.
+<<NormFinder1>>=
+selectHKs(Colon.qPCRBatch, log = FALSE, trace = FALSE, 
+          Symbols = featureNames(Colon.qPCRBatch))$ranking
+selectHKs(Bladder.qPCRBatch, log = FALSE, trace = FALSE, 
+          Symbols = featureNames(Bladder.qPCRBatch))$ranking
+@
+As we are often interested in more than one reference/housekeeping gene we also
+implemented a step-wise procedure of the NormFinder algorithm explained in
+Section
+``Average control gene'' in the supplementary information of And04. This
+procedure
+is available via function \code{selectHKs}.
+<<NormFinder2>>=
+group <- pData(Colon.qPCRBatch)[,"Group"]
+selectHKs(Colon.qPCRBatch, 
+          log = FALSE, trace = TRUE, group = group,
+          Symbols = featureNames(Colon.qPCRBatch), minNrHKs = 12,
+          method = "NormFinder")$ranking
+group <- pData(Bladder.qPCRBatch)[,"Group"]
+selectHKs(Bladder.qPCRBatch, group = group,
+          log = FALSE, trace = FALSE, 
+          Symbols = featureNames(Bladder.qPCRBatch), minNrHKs = 13,
+          method = "NormFinder")$ranking
+@
+%-------------------------------------------------------------------------------
+\section{Normalization by means of reference/housekeeping genes}
+%-------------------------------------------------------------------------------
+\subsection{$\Delta Ct$ method using a single housekeeper}
+%-------------------------------------------------------------------------------
+The $\Delta Ct$ method normalises detectors within a sample by subtracting the cycle time value of the housekeeper gene from the other genes.
+This can be done in \code{NormqPCR} as follows:
+
+for the example dataset from \pkg{ReadqPCR} we must first read in the
+data:
+<<taqman read dCt>>=
+path <- system.file("exData", package = "NormqPCR")
+taqman.example <- file.path(path, "example.txt")
+qPCR.example <- file.path(path, "qPCR.example.txt")
+qPCRBatch.taqman <- read.taqman(taqman.example)
+@
+
+We then need to supply a housekeeper gene to be subtracted:
+
+<<dCt>>=
+hkgs<-"Actb-Rn00667869_m1"
+qPCRBatch.norm <- deltaCt(qPCRBatch =  qPCRBatch.taqman, hkgs = hkgs, calc="arith")
+head(exprs(qPCRBatch.norm))
+@
+
+This returns a new \code{qPCRBatch}, with new values in the exprs slot. This will be compatible with many other bioconductor and R packages, such as heatmap.
+
+Note these numbers might be negative. For further analysis requiring postive values only, \verb+2^+ can be used to transform the data into 
+$2^{\Delta CT}$ values.
+
+%-------------------------------------------------------------------------------
+\subsection{$\Delta Ct$ method using a combination of housekeeping genes}
+%-------------------------------------------------------------------------------
+If the user wishes to normalise by more than one housekeeping gene, for example
+if they have found a more than one housekeeping gene using the NormFinder/geNorm
+algorithms described above, they can. This is implemented by calculating the
+average of these values to form a "pseudo-housekeeper" which is subtracted from the other values. So using the same dataset as above, using housekeeping genes GAPDH, Beta-2-microglobulin and Beta-actin, the following steps would be taken:
+
+<<dCt many genes>>=
+hkgs<-c("Actb-Rn00667869_m1", "B2m-Rn00560865_m1", "Gapdh-Rn99999916_s1")
+qPCRBatch.norm <- deltaCt(qPCRBatch =  qPCRBatch.taqman, hkgs = hkgs, calc="arith")
+head(exprs(qPCRBatch.norm))
+@
+
+%-------------------------------------------------------------------------------
+\subsection{$2^{-\Delta \Delta Ct}$ method using a single housekeeper}
+%-------------------------------------------------------------------------------
+It is possible to use the $2^{-\Delta \Delta Ct}$ method for calculating
+relative gene expression between two sample types.
+Both the same well and the separate well methods as detailed in \cite{ddCt} can
+be used for this purpose, and will produce the same answers, but with different levels of variation.
+By default detectors in the same sample will be paired with the housekeeper, and the standard deviation used will be that of the differences between detectors and the housekeepers. However, if the argument \code{paired=FALSE} is added, standard deviation between case and control will be calculated as s = $\sqrt{s_{1}^{2} +
+s_{2}^{2}}$, where $s_{1}$ is the standard deviation for the detector readings and $s_{2}$ is the standard deviation the housekeeper gene readings.
+The latter approach is not recommended when the housekeeper and genes to be compared
+are from the same sample, as is the case when using the taqman cards, but is
+included for completeness and for situations where readings for the housekeeper
+might be taken from a separate biological replicate (for example in a {\it post
+hoc} manner due to the originally designated housekeeping genes not performing
+well), or for when NormqPCR is used for more traditional qPCR where the products
+undergo amplifications from separate wells.
+
+for the example dataset from \pkg{ReadqPCR} we must first read in the
+data:
+<<taqman read>>=
+path <- system.file("exData", package = "NormqPCR")
+taqman.example <- file.path(path, "example.txt")
+qPCR.example <- file.path(path, "qPCR.example.txt")
+qPCRBatch.taqman <- read.taqman(taqman.example)
+@
+
+\code{deltaDeltaCt} also requires a contrast matrix.
+This is to contain columns which will be used to specify the samples
+representing \code{case} and \code{control} which are to be compared, in a
+similar way to the \pkg{limma} package. these columns should contain 1s or 0s
+which refer to the samples in either category:
+
+<< contrast >>=
+contM <- cbind(c(0,0,1,1,0,0,1,1),c(1,1,0,0,1,1,0,0))
+colnames(contM) <- c("interestingPhenotype","wildTypePhenotype")
+rownames(contM) <- sampleNames(qPCRBatch.taqman)
+contM
+@
+
+We can now normalise each sample by a given housekeeping gene and then look at
+the ratio of expression between the case and control samples. Results show (by
+column):
+1) Name of gene represented by detector.
+2) Case $\Delta Ct$ for the detector:
+the average cycle time for this detector in the samples denoted as "case" - the
+housekeeper cycle time.
+3) the standard deviation
+for the cycle times used to calculate the value in column 2). 
+4) Control $\Delta
+Ct$ for the detector: the average cycle time for this detector in the samples
+denoted as "controller", or the "callibrator" samples - the housekeeper cycle
+time. 
+5) The standard deviation for the cycle
+times used to calculate the value in column 4).
+6) $2^{-\Delta \Delta Ct}$ - The difference between the  $\Delta Ct$ values for
+case and control. We then find $2^{-}$ of this value. 
+7) and 8) correspond to 1 s.d. either side of the mean value, as detailed in \cite{ddCt}.
+
+ 
+
+<< ddCt >>=
+hkg <- "Actb-Rn00667869_m1"
+ddCt.taqman <- deltaDeltaCt(qPCRBatch = qPCRBatch.taqman, maxNACase=1, maxNAControl=1, hkg=hkg, contrastM=contM, case="interestingPhenotype", control="wildTypePhenotype", statCalc="geom", hkgCalc="arith")
+head(ddCt.taqman)
+@
+
+We can also average the taqman data using the separate samples/wells method .
+Here standard deviation is calculated separately and then combined, as described above. Therefore the pairing
+of housekeeper with the detector value within
+the same sample is lost. This can potentially increase variance.
+
+<< ddCt Avg >>=
+hkg <- "Actb-Rn00667869_m1"
+ddCtAvg.taqman <- deltaDeltaCt(qPCRBatch = qPCRBatch.taqman, maxNACase=1, maxNAControl=1, hkg=hkg, contrastM=contM, case="interestingPhenotype", control="wildTypePhenotype", paired=FALSE, statCalc="geom", hkgCalc="arith")
+head(ddCtAvg.taqman)
+@
+%-------------------------------------------------------------------------------
+\subsection{$2^{\Delta \Delta Ct}$ method using a combination of
+housekeeping genes}
+%-------------------------------------------------------------------------------
+If the user wishes to normalise by more than one housekeeping gene, for example
+if they have found a more than one housekeeping gene using the NormFinder/geNorm
+algorithms described above, they can. This is implemented by calculating the
+average of these values using the geometric mean to form a "pseudo-housekeeper" which is subtracted from the other values. For the dataset above, using housekeeping genes GAPDH, Beta-2-microglobulin and Beta-actin:
+
+<<taqman gM>>=
+qPCRBatch.taqman <- read.taqman(taqman.example)
+contM <- cbind(c(0,0,1,1,0,0,1,1),c(1,1,0,0,1,1,0,0))
+colnames(contM) <- c("interestingPhenotype","wildTypePhenotype")
+rownames(contM) <- sampleNames(qPCRBatch.taqman)
+hkgs<-c("Actb-Rn00667869_m1", "B2m-Rn00560865_m1", "Gapdh-Rn99999916_s1")
+ddCt.gM.taqman <- deltaDeltaCt(qPCRBatch = qPCRBatch.taqman, maxNACase=1, maxNAControl=1, hkgs=hkgs, contrastM=contM, case="interestingPhenotype", control="wildTypePhenotype", statCalc="arith", hkgCalc="arith")
+head(ddCt.gM.taqman)
+@
+
+There is also the option of using the mean housekeeper method using shared
+variance between the samples being compared, similar
+to the second \code{deltaDeltaCt} method shown above.
+<<taqman gM Avg>>=
+qPCRBatch.taqman <- read.taqman(taqman.example)
+contM <- cbind(c(0,0,1,1,0,0,1,1),c(1,1,0,0,1,1,0,0))
+colnames(contM) <- c("interestingPhenotype","wildTypePhenotype")
+rownames(contM) <- sampleNames(qPCRBatch.taqman)
+hkgs<-c("Actb-Rn00667869_m1", "B2m-Rn00560865_m1", "Gapdh-Rn99999916_s1")
+ddAvgCt.gM.taqman <-deltaDeltaCt(qPCRBatch = qPCRBatch.taqman, maxNACase=1, maxNAControl=1, hkgs=hkgs, contrastM=contM, case="interestingPhenotype", control="wildTypePhenotype", paired=FALSE, statCalc="arith", hkgCalc="arith")
+head(ddAvgCt.gM.taqman)
+@
+
+
+TO SHOW EXAMPLE USING GENORM/NORMFINDER DATA
+
+%-------------------------------------------------------------------------------
+\begin{thebibliography}{1}
+
+\bibitem{NormFinder}
+Claus Lindbjerg Andersen, Jens Ledet Jensen and Torben Falck Orntoft (2004).
+\newblock Normalization of Real-Time Quantitative Reverse Transcription-PCR
+Data: 
+A Model-Based Variance Estimation Approach to Identify Genes Suited for
+Normalization, Applied to Bladder and Colon Cancer Data Sets
+\newblock CANCER RESEARCH 64, 52455250, August 1, 2004
+\newblock \url{http://cancerres.aacrjournals.org/cgi/content/full/64/15/5245}
+
+\bibitem{ddCt}
+Kenneth Livak, Thomase Schmittgen (2001).
+\newblock Analysis of Relative Gene Expression Data Using Real-Time Quantitative
+PCR and the $2^{\Delta \Delta Ct}$ Method.
+\newblock Methods 25, 402-408, 2001
+\newblock \url{http://www.ncbi.nlm.nih.gov/pubmed/11846609}
+
+\bibitem{geNorm}
+Jo Vandesompele, Katleen De Preter, Filip Pattyn, Bruce Poppe, Nadine Van Roy, 
+Anne De Paepe and Frank Speleman (2002).
+\newblock Accurate normalization of real-time quantitative RT-PCR data by
+geometric
+averiging of multiple internal control genes.
+\newblock Genome Biology 2002, 3(7):research0034.1-0034.11
+\newblock \url{http://genomebiology.com/2002/3/7/research/0034/}
+
+\end{thebibliography}
+%-------------------------------------------------------------------------------
+\end{document}
+
+

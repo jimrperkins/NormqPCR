@@ -1,0 +1,13 @@
+importClassesFrom(ReadqPCR, qPCRBatch)
+export(geomMean,
+       stabMeasureM,
+       stabMeasureRho,
+       selectHKs,
+       deltaCt,
+       replaceNAs,
+       deltaDeltaCt,
+       makeAllNAs,
+       combineTechReps,
+       replaceAboveCutOff,
+       makeAllNAs,
+       replaceNAs)
