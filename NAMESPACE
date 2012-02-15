@@ -8,6 +8,4 @@ export(geomMean,
        deltaDeltaCt,
        makeAllNAs,
        combineTechReps,
-       replaceAboveCutOff,
-       makeAllNAs,
-       replaceNAs)
+       replaceAboveCutOff)
