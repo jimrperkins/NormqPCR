@@ -28,6 +28,11 @@ setGeneric("makeAllNAs",
   standardGeneric("makeAllNAs")
 )
 
+setGeneric("makeAllNewVal",
+  function(qPCRBatch, ...)
+  standardGeneric("makeAllNewVal")
+)
+
 setGeneric("selectHKs",
   function(qPCRBatch, ...)
   standardGeneric("selectHKs")

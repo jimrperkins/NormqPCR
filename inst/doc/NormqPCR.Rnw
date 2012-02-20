@@ -170,10 +170,10 @@ More details on contrast matrices can be found in the limma manual, which requir
 
 For example, if the user decides that if at least 3 out of 4 readings are NAs
 for a given detector, then all readings should be NA, they can do the
-following, using the \code{makeAllNAs} method:
+following, using the \code{makeAllNewVal} method:
 
 <<replace 3 or more NAs with all NAs>>=
-qPCRBatch.taqman.replaced <- makeAllNAs(qPCRBatch.taqman, contM, sMaxM)
+qPCRBatch.taqman.replaced <- makeAllNewVal(qPCRBatch.taqman, contM, sMaxM, newVal=NA)
 @
 
 Here you can see for the Ccl20.Rn00570287\_m1 detector, the control values have

@@ -18,6 +18,22 @@ setMethod("replaceAboveCutOff", signature = "qPCRBatch", definition =
 # makeAllNAs - for each detector, if you have > a given number of NAs, then all values are all replaced with NA
 # This means we can ignore any NAs in future calculations (since they can be dealt with using these functions
 setMethod("makeAllNAs", signature = "qPCRBatch", definition =
+  function(qPCRBatch, contrastM, sampleMaxM) {
+    expM <- exprs(qPCRBatch)
+    for (detector in featureNames(qPCRBatch)) {
+      for(phenotype in colnames(sampleMaxM)) {
+        pColumns <- row.names(contrastM)[contrastM[,phenotype] == 1]
+        if(sum(is.na(expM[detector,pColumns])) >= sampleMaxM[,phenotype]) expM[detector,pColumns] <- NA
+      }
+    }
+    exprs(qPCRBatch) <- expM
+    return(qPCRBatch)
+  }
+)
+###################################################################################################
+# for each detector, if you have > a given number of NAs, then all values are all replaced with
+# a given value. Done for case and control
+setMethod("makeAllNewVal", signature = "qPCRBatch", definition =
   function(qPCRBatch, contrastM, sampleMaxM, newVal=NA) {
     expM <- exprs(qPCRBatch)
     for (detector in featureNames(qPCRBatch)) {
@@ -30,3 +46,4 @@ setMethod("makeAllNAs", signature = "qPCRBatch", definition =
     return(qPCRBatch)
   }
 )
+

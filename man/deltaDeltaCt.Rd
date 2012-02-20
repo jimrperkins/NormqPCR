@@ -11,11 +11,10 @@
   using the delta delta Cq method.
 }
 \usage{
-  deltaDeltaCq(qPCRBatch,\dots)
-  \S4method{deltaDeltaCq}{qPCRBatch}(qPCRBatch, maxNACase=0, maxNAControl=0, hkgs, contrastM, 
-             case, control, paired=TRUE, hkgCalc="arith", statCalc="arith")
+  deltaDeltaCq(qPCRBatch, maxNACase, maxNAControl, hkgs, contrastM,
+             case, control, paired, hkgCalc, statCalc)
   deltaDeltaCt(qPCRBatch,\dots)
-  \S4method{deltaDeltaCt}{qPCRBatch}(qPCRBatch, maxNACase=0, maxNAControl=0, hkgs, contrastM,
+  \S4method{deltaDeltaCt}{qPCRBatch}(qPCRBatch, maxNACase=0, maxNAControl=0, hkgs, contrastM, 
              case, control, paired=TRUE, hkgCalc="arith", statCalc="arith")
 }
 \arguments{

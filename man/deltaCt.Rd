@@ -9,8 +9,8 @@ Normalise qPCR eset using a given housekeeping gene as control, then perform dif
 }
 \usage{
 deltaCt(qPCRBatch, \dots)
-deltaCq(qPCRBatch, \dots)
 \S4method{deltaCt}{qPCRBatch}(qPCRBatch, hkgs, combineHkgs=FALSE, calc="arith")
+deltaCq(qPCRBatch, hkgs, combineHkgs, calc)
 }
 \arguments{
   \item{qPCRBatch}{ qPCR-specific expression set, containing qPCR data. }
@@ -35,7 +35,7 @@ deltaCq(qPCRBatch, \dots)
 }
 \author{ James Perkins \email{jperkins@biochem.ucl.ac.uk}}
 %\note{}
-\seealso{\code{selectHKs}, \code{deltaDeltaCt}}
+\seealso{\code{selectHKs}, \code{deltaDeltaCq}}
 \examples{
   path <- system.file("exData", package = "NormqPCR")
   taqman.example <- file.path(path, "example.txt")
