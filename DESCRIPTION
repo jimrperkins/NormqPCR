@@ -1,16 +1,15 @@
 Package: NormqPCR
-Version: 1.1.0
+Version: 1.1.1
 Date: 2012-02-16
 Title: Functions for normalisation of RT-qPCR data
 Description: Functions for the selection of optimal reference genes and the normalisation of real-time quantitative PCR data.
 Author: Matthias Kohl, James Perkins
-Maintainer: James Perkins <jperkins@biochem.ucl.ac.uk>
+Maintainer: James Perkins <j.perkins@ucl.ac.uk>
 Depends: R(>= 2.10.0), stats, RColorBrewer, Biobase, methods, ReadqPCR
 Imports: ReadqPCR
 biocView: qPCR, MicrotitrePlateAssay
 License: LGPL-3
 LazyLoad: yes
 LazyData: yes
-URL: http://qpcr.r-forge.r-project.org/
-Collate: allGenerics.R deltaCt.R selectHKs.R combineTechReps.R deltaDeltaCt.R stabMeasureM.R dealWithNA.R geomMean.R stabMeasureRho.R
-
+URL: www.bioconductor.org/packages/release/bioc/html/NormqPCR.html
+Collate: allGenerics.R deltaCt.R selectHKs.R combineTechReps.R deltaDeltaCt.R stabMeasureM.R dealWithNA.R geomMean.R stabMeasureRho.R CtToCqWrappers.R

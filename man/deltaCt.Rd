@@ -1,5 +1,6 @@
 \name{deltaCt}
 \alias{deltaCt}
+\alias{deltaCq}
 \alias{deltaCt-methods}
 \alias{deltaCt,qPCRBatch-method}
 \title{ Perform normalization with a given housekeeping gene }
@@ -8,7 +9,7 @@ Normalise qPCR eset using a given housekeeping gene as control, then perform dif
 }
 \usage{
 deltaCt(qPCRBatch, \dots)
-
+deltaCq(qPCRBatch, \dots)
 \S4method{deltaCt}{qPCRBatch}(qPCRBatch, hkgs, combineHkgs=FALSE, calc="arith")
 }
 \arguments{

@@ -1,5 +1,6 @@
 \name{deltaDeltaCt}
 \alias{deltaDeltaCt}
+\alias{deltaDeltaCq}
 \alias{deltaDeltaCt-methods}
 \alias{deltaDeltaCt,qPCRBatch-method}
 \title{ Perform normalization and differential expression with given housekeeping gene }
