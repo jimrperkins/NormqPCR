@@ -1,4 +1,4 @@
-Well PlateIcontrolB Sample Detector Cts
+Well PlateIcontrolB Sample Detector Cq
 1 caseA one gene_dx 20.2712554227792
 2 caseA one gene_aj 19.8498329931463
 3 caseA one gene_jy 19.5007131087816

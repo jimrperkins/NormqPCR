@@ -41,7 +41,7 @@ deltaCq(qPCRBatch, hkgs, combineHkgs, calc)
   taqman.example <- file.path(path, "example.txt")
   qPCRBatch.taqman <- read.taqman(taqman.example)
   hkgs<-"Actb-Rn00667869_m1"
-  qPCRBatch.norm <- deltaCt(qPCRBatch =  qPCRBatch.taqman, hkgs = hkgs, calc="arith")
+  qPCRBatch.norm <- deltaCq(qPCRBatch =  qPCRBatch.taqman, hkgs = hkgs, calc="arith")
   head(exprs(qPCRBatch.norm))
 }
 \keyword{data}
