@@ -54,8 +54,8 @@ how the user may combine technical replicates, deal with undetermined values
 and deal with values above a user-chosen threshold. The rest of the vignette is split into
 two distinct sections, the first giving details of different methods to select
 the best houskeeping gene/genes for normalisation, and the second showing how to
-use the selected housekeeping gene(s) to produce $2^{-\Delta Ct}$ normalised
-estimators and $2^{-\Delta \Delta Ct}$ estimators of differential expression.
+use the selected housekeeping gene(s) to produce $2^{-\Delta Cq}$ normalised
+estimators and $2^{-\Delta \Delta Cq}$ estimators of differential expression.
 %-------------------------------------------------------------------------------
 \section{Combining technical replicates} 
 %-------------------------------------------------------------------------------
@@ -79,7 +79,7 @@ rownames(exprs(qPCRBatch.qPCR.techReps))[1:8]
 @
 
 It is likely that before continuing with the analysis, the user would wish to
-average the technical replicates by using the arithmetic mean of the raw Ct values. This can be
+average the technical replicates by using the arithmetic mean of the raw Cq values. This can be
 achieved using the combineTechReps function, which will produce a new qPCRBatch
 object, with all tech reps reduced to one reading:
 
@@ -339,14 +339,14 @@ selectHKs(Bladder.qPCRBatch, group = group,
 %-------------------------------------------------------------------------------
 \section{Normalization by means of reference/housekeeping genes}
 %-------------------------------------------------------------------------------
-\subsection{$\Delta Ct$ method using a single housekeeper}
+\subsection{$\Delta Cq$ method using a single housekeeper}
 %-------------------------------------------------------------------------------
-The $\Delta Ct$ method normalises detectors within a sample by subtracting the cycle time value of the housekeeper gene from the other genes.
+The $\Delta Cq$ method normalises detectors within a sample by subtracting the cycle time value of the housekeeper gene from the other genes.
 This can be done in \code{NormqPCR} as follows:
 
 for the example dataset from \pkg{ReadqPCR} we must first read in the
 data:
-<<taqman read dCt>>=
+<<taqman read dCq>>=
 path <- system.file("exData", package = "NormqPCR")
 taqman.example <- file.path(path, "example.txt")
 qPCR.example <- file.path(path, "qPCR.example.txt")
@@ -355,7 +355,7 @@ qPCRBatch.taqman <- read.taqman(taqman.example)
 
 We then need to supply a housekeeper gene to be subtracted:
 
-<<dCt>>=
+<<dCq>>=
 hkgs<-"Actb-Rn00667869_m1"
 qPCRBatch.norm <- deltaCq(qPCRBatch =  qPCRBatch.taqman, hkgs = hkgs, calc="arith")
 head(exprs(qPCRBatch.norm))
@@ -367,23 +367,23 @@ Note these numbers might be negative. For further analysis requiring postive val
 $2^{\Delta CT}$ values.
 
 %-------------------------------------------------------------------------------
-\subsection{$\Delta Ct$ method using a combination of housekeeping genes}
+\subsection{$\Delta Cq$ method using a combination of housekeeping genes}
 %-------------------------------------------------------------------------------
 If the user wishes to normalise by more than one housekeeping gene, for example
 if they have found a more than one housekeeping gene using the NormFinder/geNorm
 algorithms described above, they can. This is implemented by calculating the
 average of these values to form a "pseudo-housekeeper" which is subtracted from the other values. So using the same dataset as above, using housekeeping genes GAPDH, Beta-2-microglobulin and Beta-actin, the following steps would be taken:
 
-<<dCt many genes>>=
+<<dCq many genes>>=
 hkgs<-c("Actb-Rn00667869_m1", "B2m-Rn00560865_m1", "Gapdh-Rn99999916_s1")
-qPCRBatch.norm <- deltaCt(qPCRBatch =  qPCRBatch.taqman, hkgs = hkgs, calc="arith")
+qPCRBatch.norm <- deltaCq(qPCRBatch =  qPCRBatch.taqman, hkgs = hkgs, calc="arith")
 head(exprs(qPCRBatch.norm))
 @
 
 %-------------------------------------------------------------------------------
-\subsection{$2^{-\Delta \Delta Ct}$ method using a single housekeeper}
+\subsection{$2^{-\Delta \Delta Cq}$ method using a single housekeeper}
 %-------------------------------------------------------------------------------
-It is possible to use the $2^{-\Delta \Delta Ct}$ method for calculating
+It is possible to use the $2^{-\Delta \Delta Cq}$ method for calculating
 relative gene expression between two sample types.
 Both the same well and the separate well methods as detailed in \cite{ddCt} can
 be used for this purpose, and will produce the same answers, but with different levels of variation.
@@ -406,7 +406,7 @@ qPCR.example <- file.path(path, "qPCR.example.txt")
 qPCRBatch.taqman <- read.taqman(taqman.example)
 @
 
-\code{deltaDeltaCt} also requires a contrast matrix.
+\code{deltaDeltaCq} also requires a contrast matrix.
 This is to contain columns which will be used to specify the samples
 representing \code{case} and \code{control} which are to be compared, in a
 similar way to the \pkg{limma} package. these columns should contain 1s or 0s
@@ -423,27 +423,27 @@ We can now normalise each sample by a given housekeeping gene and then look at
 the ratio of expression between the case and control samples. Results show (by
 column):
 1) Name of gene represented by detector.
-2) Case $\Delta Ct$ for the detector:
+2) Case $\Delta Cq$ for the detector:
 the average cycle time for this detector in the samples denoted as "case" - the
 housekeeper cycle time.
 3) the standard deviation
 for the cycle times used to calculate the value in column 2). 
 4) Control $\Delta
-Ct$ for the detector: the average cycle time for this detector in the samples
+Cq$ for the detector: the average cycle time for this detector in the samples
 denoted as "controller", or the "callibrator" samples - the housekeeper cycle
 time. 
 5) The standard deviation for the cycle
 times used to calculate the value in column 4).
-6) $2^{-\Delta \Delta Ct}$ - The difference between the  $\Delta Ct$ values for
+6) $2^{-\Delta \Delta Cq}$ - The difference between the  $\Delta Cq$ values for
 case and control. We then find $2^{-}$ of this value. 
 7) and 8) correspond to 1 s.d. either side of the mean value, as detailed in \cite{ddCt}.
 
  
 
-<< ddCt >>=
+<< ddCq >>=
 hkg <- "Actb-Rn00667869_m1"
-ddCt.taqman <- deltaDeltaCt(qPCRBatch = qPCRBatch.taqman, maxNACase=1, maxNAControl=1, hkg=hkg, contrastM=contM, case="interestingPhenotype", control="wildTypePhenotype", statCalc="geom", hkgCalc="arith")
-head(ddCt.taqman)
+ddCq.taqman <- deltaDeltaCq(qPCRBatch = qPCRBatch.taqman, maxNACase=1, maxNAControl=1, hkg=hkg, contrastM=contM, case="interestingPhenotype", control="wildTypePhenotype", statCalc="geom", hkgCalc="arith")
+head(ddCq.taqman)
 @
 
 We can also average the taqman data using the separate samples/wells method .
@@ -451,13 +451,13 @@ Here standard deviation is calculated separately and then combined, as described
 of housekeeper with the detector value within
 the same sample is lost. This can potentially increase variance.
 
-<< ddCt Avg >>=
+<< ddCq Avg >>=
 hkg <- "Actb-Rn00667869_m1"
-ddCtAvg.taqman <- deltaDeltaCt(qPCRBatch = qPCRBatch.taqman, maxNACase=1, maxNAControl=1, hkg=hkg, contrastM=contM, case="interestingPhenotype", control="wildTypePhenotype", paired=FALSE, statCalc="geom", hkgCalc="arith")
-head(ddCtAvg.taqman)
+ddCqAvg.taqman <- deltaDeltaCq(qPCRBatch = qPCRBatch.taqman, maxNACase=1, maxNAControl=1, hkg=hkg, contrastM=contM, case="interestingPhenotype", control="wildTypePhenotype", paired=FALSE, statCalc="geom", hkgCalc="arith")
+head(ddCqAvg.taqman)
 @
 %-------------------------------------------------------------------------------
-\subsection{$2^{\Delta \Delta Ct}$ method using a combination of
+\subsection{$2^{\Delta \Delta Cq}$ method using a combination of
 housekeeping genes}
 %-------------------------------------------------------------------------------
 If the user wishes to normalise by more than one housekeeping gene, for example
@@ -471,21 +471,21 @@ contM <- cbind(c(0,0,1,1,0,0,1,1),c(1,1,0,0,1,1,0,0))
 colnames(contM) <- c("interestingPhenotype","wildTypePhenotype")
 rownames(contM) <- sampleNames(qPCRBatch.taqman)
 hkgs<-c("Actb-Rn00667869_m1", "B2m-Rn00560865_m1", "Gapdh-Rn99999916_s1")
-ddCt.gM.taqman <- deltaDeltaCt(qPCRBatch = qPCRBatch.taqman, maxNACase=1, maxNAControl=1, hkgs=hkgs, contrastM=contM, case="interestingPhenotype", control="wildTypePhenotype", statCalc="arith", hkgCalc="arith")
-head(ddCt.gM.taqman)
+ddCq.gM.taqman <- deltaDeltaCq(qPCRBatch = qPCRBatch.taqman, maxNACase=1, maxNAControl=1, hkgs=hkgs, contrastM=contM, case="interestingPhenotype", control="wildTypePhenotype", statCalc="arith", hkgCalc="arith")
+head(ddCq.gM.taqman)
 @
 
 There is also the option of using the mean housekeeper method using shared
 variance between the samples being compared, similar
-to the second \code{deltaDeltaCt} method shown above.
+to the second \code{deltaDeltaCq} method shown above.
 <<taqman gM Avg>>=
 qPCRBatch.taqman <- read.taqman(taqman.example)
 contM <- cbind(c(0,0,1,1,0,0,1,1),c(1,1,0,0,1,1,0,0))
 colnames(contM) <- c("interestingPhenotype","wildTypePhenotype")
 rownames(contM) <- sampleNames(qPCRBatch.taqman)
 hkgs<-c("Actb-Rn00667869_m1", "B2m-Rn00560865_m1", "Gapdh-Rn99999916_s1")
-ddAvgCt.gM.taqman <-deltaDeltaCt(qPCRBatch = qPCRBatch.taqman, maxNACase=1, maxNAControl=1, hkgs=hkgs, contrastM=contM, case="interestingPhenotype", control="wildTypePhenotype", paired=FALSE, statCalc="arith", hkgCalc="arith")
-head(ddAvgCt.gM.taqman)
+ddAvgCq.gM.taqman <-deltaDeltaCq(qPCRBatch = qPCRBatch.taqman, maxNACase=1, maxNAControl=1, hkgs=hkgs, contrastM=contM, case="interestingPhenotype", control="wildTypePhenotype", paired=FALSE, statCalc="arith", hkgCalc="arith")
+head(ddAvgCq.gM.taqman)
 @
 
 

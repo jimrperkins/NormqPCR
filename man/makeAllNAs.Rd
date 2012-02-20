@@ -1,8 +1,8 @@
 \name{makeAllNAs}
 \alias{makeAllNAs}
 \alias{makeAllNAs,qPCRBatch-method}
-\title{ Make all Ct values NA  }
-\description{ Make all Ct values for a given detector NA when the number of NAs for that detector is above a given threshold
+\title{ Make all Cq values NA  }
+\description{ Make all Cq values for a given detector NA when the number of NAs for that detector is above a given threshold
 }
 \usage{
 makeAllNAs(qPCRBatch, \dots)

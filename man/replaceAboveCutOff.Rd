@@ -1,8 +1,8 @@
 \name{replaceAboveCutOff}
 \alias{replaceAboveCutOff}
 \alias{replaceAboveCutOff,qPCRBatch-method}
-\title{ Replace Ct values with new value}
-\description{ Replace Ct values above a given threshold with a new value
+\title{ Replace Cq values with new value}
+\description{ Replace Cq values above a given threshold with a new value
 }
 \usage{
 replaceAboveCutOff(qPCRBatch, \dots)

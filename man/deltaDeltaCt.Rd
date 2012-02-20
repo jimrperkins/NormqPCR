@@ -2,19 +2,20 @@
 \alias{deltaDeltaCt}
 \alias{deltaDeltaCq}
 \alias{deltaDeltaCt-methods}
+\alias{deltaDeltaCq-methods}
 \alias{deltaDeltaCt,qPCRBatch-method}
+\alias{deltaDeltaCq,qPCRBatch-method}
 \title{ Perform normalization and differential expression with given housekeeping gene }
 \description{
-  Normalise qPCR eset using housekeeping genes as control, then perform differential expression analysis 
-  using the   delta delta Ct method.
-  Differs from the deltaDeltaAvgCt method in that the hkg values are subtracted and the sd is 
-  calculated on the differences (i.e. paired).
-  Suitable when housekeeping genes are from same wells/sample as the other detectors
+  Normalise qPCRBatch RT-qPCR data using housekeeping genes as control, then perform differential expression analysis 
+  using the delta delta Cq method.
 }
 \usage{
+  deltaDeltaCq(qPCRBatch,\dots)
+  \S4method{deltaDeltaCq}{qPCRBatch}(qPCRBatch, maxNACase=0, maxNAControl=0, hkgs, contrastM, 
+             case, control, paired=TRUE, hkgCalc="arith", statCalc="arith")
   deltaDeltaCt(qPCRBatch,\dots)
-
-  \S4method{deltaDeltaCt}{qPCRBatch}(qPCRBatch, maxNACase=0, maxNAControl=0, hkgs, contrastM, 
+  \S4method{deltaDeltaCt}{qPCRBatch}(qPCRBatch, maxNACase=0, maxNAControl=0, hkgs, contrastM,
              case, control, paired=TRUE, hkgCalc="arith", statCalc="arith")
 }
 \arguments{
@@ -34,7 +35,7 @@
   Takes expression set of qPCR values and normalises them using different housekeeping genes. Returns seperate sets of values for each housekeeping gene given.
 }
 \value{
-  matrix with columns containing the detector ids, 2^delta Ct values for the sample of interest and the callibrator sample, alongside their respective standard deviations, the 2^delta delta Ct values and the minimum and maximum values (ie the values that are 1 sd away )
+  matrix with columns containing the detector ids, 2^delta Cq values for the sample of interest and the callibrator sample, alongside their respective standard deviations, the 2^delta delta Cq values and the minimum and maximum values (ie the values that are 1 sd away )
 }
 \references{
   Kenneth Livak, Thomase Schmittgen (2001).
@@ -45,7 +46,7 @@
 }
 \author{ James Perkins \email{jperkins@biochem.ucl.ac.uk}}
 %\note{}
-\seealso{\code{selectHKs}, \code{deltaCt}}
+\seealso{\code{selectHKs}, \code{deltaCq}}
 \examples{
   path <- system.file("exData", package = "NormqPCR")
   taqman.example <- file.path(path, "example.txt")
@@ -56,7 +57,7 @@
   colnames(contM) <- c("interestingPhenotype","wildTypePhenotype")
   rownames(contM) <- sampleNames(qPCRBatch.taqman)
 
-  ddCt.taqman <- deltaDeltaCt(qPCRBatch = qPCRBatch.taqman, maxNACase=1, maxNAControl=1, hkg=hkg, contrastM=contM, case="interestingPhenotype", control="wildTypePhenotype", statCalc="geom", hkgCalc="arith")
-  head(ddCt.taqman)
+  ddCq.taqman <- deltaDeltaCq(qPCRBatch = qPCRBatch.taqman, maxNACase=1, maxNAControl=1, hkg=hkg, contrastM=contM, case="interestingPhenotype", control="wildTypePhenotype", statCalc="geom", hkgCalc="arith")
+  head(ddCq.taqman)
 }
 \keyword{data}
