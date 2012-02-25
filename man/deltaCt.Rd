@@ -10,7 +10,7 @@ Normalise qPCR eset using a given housekeeping gene as control, then perform dif
 \usage{
 deltaCt(qPCRBatch, \dots)
 \S4method{deltaCt}{qPCRBatch}(qPCRBatch, hkgs, combineHkgs=FALSE, calc="arith")
-deltaCq(qPCRBatch, hkgs, combineHkgs, calc)
+deltaCq(qPCRBatch, hkgs, combineHkgs=FALSE, calc="arith")
 }
 \arguments{
   \item{qPCRBatch}{ qPCR-specific expression set, containing qPCR data. }
