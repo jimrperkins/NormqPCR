@@ -51,7 +51,7 @@ setMethod("deltaDeltaCt", signature = "qPCRBatch", definition =
           sdCase <- NA
         } else if(! FALSE %in% is.na(VCase)) {
           warning("No Detector for Case")
-          dCtCase <- rep(NA, length = VCase)
+          dCtCase <- rep(NA, length = length(VCase))
           sdCase <- NA
         } else {
           if(statCalc == "geom") {
@@ -74,7 +74,7 @@ setMethod("deltaDeltaCt", signature = "qPCRBatch", definition =
           sdControl <- NA
         } else if(! FALSE %in% is.na(VControl)) {
           warning("No Detector for Control")
-          dCtControl <- rep(NA, length = VControl)
+          dCtControl <- rep(NA, length = length(VControl))
           sdControl <- NA
         } else {
           if(statCalc == "geom") {
