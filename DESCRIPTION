@@ -7,7 +7,7 @@ Author: Matthias Kohl, James Perkins
 Maintainer: James Perkins <j.perkins@ucl.ac.uk>
 Depends: R(>= 2.14.0), stats, RColorBrewer, Biobase, methods, ReadqPCR
 Imports: ReadqPCR
-biocViews: qPCR, MicrotitrePlateAssay
+biocViews: MicrotitrePlateAssay, GeneExpression, qPCR
 License: LGPL-3
 LazyLoad: yes
 LazyData: yes
