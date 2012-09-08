@@ -23,7 +23,12 @@ with a 1 or 0 in the matrix indicating which sample types the different samples 
 \value{
   \code{qPCRBatch} object with a new exprs slot, everything else equal
 }
-%\references{ }
+\references{ 
+  Perkins, JR, Dawes, JM, McMahon, SB, Bennett, DL, Orengo, C, Kohl, M (2012). 
+  ReadqPCR and NormqPCR: R packages for the reading, quality checking and 
+  normalisation of RT-qPCR quantification cycle (Cq) data. 
+  \emph{BMC Genomics}, \bold{13}, 1:296.
+}
 \author{ James Perkins \email{jperkins@biochem.ucl.ac.uk}}
 %\note{}
 %\seealso{}

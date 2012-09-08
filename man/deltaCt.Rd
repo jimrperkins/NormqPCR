@@ -32,6 +32,11 @@ deltaCq(qPCRBatch, hkgs, combineHkgs=FALSE, calc="arith")
   PCR and the 2^DDCt Method.
   Methods 25, 402-408, 2001
   \url{http://www.ncbi.nlm.nih.gov/pubmed/11846609}
+
+  Perkins, JR, Dawes, JM, McMahon, SB, Bennett, DL, Orengo, C, Kohl, M (2012). 
+  ReadqPCR and NormqPCR: R packages for the reading, quality checking and 
+  normalisation of RT-qPCR quantification cycle (Cq) data. 
+  \emph{BMC Genomics}, \bold{13}, 1:296.
 }
 \author{ James Perkins \email{jperkins@biochem.ucl.ac.uk}}
 %\note{}

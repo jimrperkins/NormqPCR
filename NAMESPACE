@@ -11,4 +11,5 @@ export(geomMean,
        makeAllNAs,
        makeAllNewVal,
        combineTechReps,
+       combineTechRepsWithSD,
        replaceAboveCutOff)

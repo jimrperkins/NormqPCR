@@ -18,7 +18,12 @@ geomMean(x, na.rm = TRUE)
 \value{
   geometric mean
 }
-%\references{ }
+\references{ 
+  Perkins, JR, Dawes, JM, McMahon, SB, Bennett, DL, Orengo, C, Kohl, M (2012). 
+  ReadqPCR and NormqPCR: R packages for the reading, quality checking and 
+  normalisation of RT-qPCR quantification cycle (Cq) data. 
+  \emph{BMC Genomics}, \bold{13}, 1:296.
+}
 \author{ Matthias Kohl \email{Matthias.Kohl@stamats.de}}
 \note{
 A first version of this function appeared in package SLqPCR.

@@ -44,6 +44,11 @@
   Normalization, Applied to Bladder and Colon Cancer Data Sets. 
   CANCER RESEARCH 64, 5245-5250, August 1, 2004.
   \url{http://cancerres.aacrjournals.org/cgi/content/full/64/15/5245}
+
+  Perkins, JR, Dawes, JM, McMahon, SB, Bennett, DL, Orengo, C, Kohl, M (2012). 
+  ReadqPCR and NormqPCR: R packages for the reading, quality checking and 
+  normalisation of RT-qPCR quantification cycle (Cq) data. 
+  \emph{BMC Genomics}, \bold{13}, 1:296.
 }
 \author{ Matthias Kohl \email{Matthias.Kohl@stamats.de}}
 %\note{ ~~further notes~~ 

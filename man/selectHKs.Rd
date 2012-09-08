@@ -52,6 +52,11 @@ selectHKs(qPCRBatch, \dots)
   \item{rho }{ stability measure rho of Andersen et al. (2004) }
 }
 \references{ 
+  Perkins, JR, Dawes, JM, McMahon, SB, Bennett, DL, Orengo, C, Kohl, M (2012). 
+  ReadqPCR and NormqPCR: R packages for the reading, quality checking and 
+  normalisation of RT-qPCR quantification cycle (Cq) data. 
+  \emph{BMC Genomics}, \bold{13}, 1:296.
+
   Jo Vandesompele, Katleen De Preter, Filip Pattyn et al. (2002). Accurate 
   normalization of real-time quantitative RT-PCR data by geometric averaging 
   of multiple internal control genes. 

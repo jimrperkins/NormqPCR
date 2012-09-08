@@ -33,6 +33,11 @@ stabMeasureM(x, log = TRUE, na.rm = TRUE)
   of multiple internal control genes. 
   Genome Biology 2002. 3(7):research0034.1-0034.11.
   \url{http://genomebiology.com/2002/3/7/research/0034/}
+
+  Perkins, JR, Dawes, JM, McMahon, SB, Bennett, DL, Orengo, C, Kohl, M (2012). 
+  ReadqPCR and NormqPCR: R packages for the reading, quality checking and 
+  normalisation of RT-qPCR quantification cycle (Cq) data. 
+  \emph{BMC Genomics}, \bold{13}, 1:296.
 }
 \author{ Matthias Kohl \email{Matthias.Kohl@stamats.de}}
 %\note{ ~~further notes~~ 

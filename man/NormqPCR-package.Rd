@@ -12,9 +12,9 @@ Functions for normalisation of real-time quantitative PCR data.
 \tabular{ll}{
 Package: \tab NormqPCR\cr
 Type: \tab Package\cr
-Version: \tab 0.99.3\cr
-Date: \tab 2011-07-15\cr
-Depends: \tab R(>= 2.10.0), stats, RColorBrewer, Biobase, methods, ReadqPCR \cr
+Version: \tab 1.3.2\cr
+Date: \tab 2012-09-08\cr
+Depends: \tab R(>= 2.14.0), stats, RColorBrewer, Biobase, methods, ReadqPCR \cr
 License: \tab LGPL-3\cr
 LazyLoad: \tab yes \cr
 LazyData: \tab yes \cr
@@ -26,6 +26,11 @@ require(NormqPCR)
 
 Maintainer: Matthias Kohl  \email{Matthias.Kohl@stamats.de}}
 \references{
+  Perkins, JR, Dawes, JM, McMahon, SB, Bennett, DL, Orengo, C, Kohl, M (2012). 
+  ReadqPCR and NormqPCR: R packages for the reading, quality checking and 
+  normalisation of RT-qPCR quantification cycle (Cq) data. 
+  \emph{BMC Genomics}, \bold{13}, 1:296.
+
   Jo Vandesompele, Katleen De Preter, Filip Pattyn et al. (2002). Accurate 
   normalization of real-time quantitative RT-PCR data by geometric averaging 
   of multiple internal control genes. 

@@ -13,6 +13,11 @@ setGeneric("combineTechReps",
   standardGeneric("combineTechReps")
 )
 
+setGeneric("combineTechRepsWithSD",
+  function(qPCRBatch, ...)
+  standardGeneric("combineTechRepsWithSD")
+)
+
 setGeneric("replaceNAs",
   function(qPCRBatch, ...)
   standardGeneric("replaceNAs")
