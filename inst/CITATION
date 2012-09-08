@@ -1,5 +1,6 @@
 if(!exists("meta") || is.null(meta)) meta <- packageDescription("NormqPCR")
-year <- sub("-.*", "", meta$Date)
+
+year <- sub(".*(2[[:digit:]]{3})-.*", "\\1", meta$Date, perl = TRUE)
 note <- sprintf("R package version %s", meta$Version)
 
 citHeader("To cite package NormqPCR in publications use:")
@@ -11,7 +12,7 @@ citEntry(entry="Manual",
          year = year,
          note = note,
          type = "R package",
-         url = "http://qpcr.r-forge.r-project.org/",
+         url = "www.bioconductor.org/packages/release/bioc/html/NormqPCR.html",
          textVersion = paste("Kohl, M. and Perkins, J.",
                              sprintf("(%s).", year),
                              "NormqPCR: Functions for normalisation of RT-qPCR data.",
