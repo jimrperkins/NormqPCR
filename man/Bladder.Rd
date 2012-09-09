@@ -1,19 +1,23 @@
 \name{Bladder}
 \alias{Bladder}
-\alias{Bladder.qPCRBatch}
 \docType{data}
-\title{ Data set of Andersen et al (2004) }
+\title{ Bladder dataset of Andersen et al (2004) }
 \description{
-  This data set was used in Andersen et al (2004) to demonstrate normalization 
+  This dataset was used in Andersen et al (2004) to demonstrate normalization 
   of real-time quantitative RT-PCR data by geometric averaging of housekeeping genes.
 }
 \usage{data(Bladder)}
 \format{
-  A qPCRBatch object which contains an expression matrix with 28 observations on the following 14 variables which stand for 
-  expression data potential reference/housekeeping genes
+  A qPCRBatch object which contains an expression matrix with the expression of
+  14 genes measured in 28 samples. The sample information is saved in the
+  \code{phenoData} slot with variables
   \describe{
-    \item{\code{Grade}}{Grade of bladder cancer. }
     \item{\code{Sample.no.}}{sample number. }
+    \item{\code{Grade}}{Grade of bladder cancer. }
+  }
+  The following information on the measured genes is saved in the variables 
+  \code{Symbol} and \code{Gene.name} of the \code{featureData} slot.
+  \describe{
     \item{\code{ATP5B}}{ATP synthase, H+ transporting, mitochondrial F1 complex, beta polypetide. }
     \item{\code{HSPCB}}{Heat shock 90-kDa protein 1, beta. }
     \item{\code{S100A6}}{S100 calcium-binding protein A6 (calcylin). }
@@ -29,8 +33,7 @@
     \item{\code{UBC}}{Ubiquitin C. }
     \item{\code{FLJ20030}}{Hypothetical protein FLJ20030. }
   }
-  It also contains a "group" column in the pData slot, which gives information on the different sample classes,
-  necessary for the NormFinder algorithm
+  For a detailed annotation see Table 1 in Anderson et al. (2004).
 }
 \details{
   The genes included in this data set were selected by screening 99 bladder 
@@ -50,7 +53,9 @@
 }
 \examples{
   data(Bladder)
-  head(exprs(Bladder.qPCRBatch))
-  pData(Bladder.qPCRBatch)
+  Bladder
+  head(exprs(Bladder))
+  pData(Bladder)
+  fData(Bladder)
 }
 \keyword{datasets}

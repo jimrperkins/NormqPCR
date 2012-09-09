@@ -1,15 +1,22 @@
 \name{Colon}
 \alias{Colon}
-\alias{Colon.qPCRBatch}
 \docType{data}
-\title{ Data set of Andersen et al (2004) }
+\title{ Colon dataset of Andersen et al (2004) }
 \description{
-  This data set was used in Andersen et al (2004) to demonstrate normalization 
+  This dataset was used in Andersen et al (2004) to demonstrate normalization 
   of real-time quantitative RT-PCR data by geometric averaging of housekeeping genes.
 }
 \usage{data(Colon)}
 \format{
-  A qPCRBatch object which contains an expression matrix with 40 observations on the following 13 variables 
+  A qPCRBatch object which contains an expression matrix with the expression of
+  13 genes measured in 40 samples. The sample information is saved in the
+  \code{phenoData} slot with variables
+  \describe{
+    \item{\code{Sample.no.}}{sample number. }
+    \item{\code{Classification}}{Classification of colon cancer. }
+  }
+  The following information on the measured genes is saved in the variables 
+  \code{Symbol} and \code{Gene.name} of the \code{featureData} slot.
   \describe{
     \item{\code{UBC}}{Ubiquitin C. }
     \item{\code{UBB}}{Ubiquitin B. }
@@ -25,8 +32,7 @@
     \item{\code{TPT1}}{Tumor protein, translationally controlled 1. }
     \item{\code{TUBA6}}{Tubulin alpha 6. }
   }
-  It also contains a "group" column in the pData slot, which gives information on the different sample classes,
-  necessary for the NormFinder algorithm
+  For a detailed annotation see Table 1 in Anderson et al. (2004).
 }
 \details{
   The genes included in this data set were selected by screening 161 colon 
@@ -46,7 +52,9 @@
 }
 \examples{
   data(Colon)
-  head(exprs(Colon.qPCRBatch))
-  pData(Colon.qPCRBatch)
+  Colon
+  head(exprs(Colon))
+  pData(Colon)
+  fData(Colon)
 }
 \keyword{datasets}

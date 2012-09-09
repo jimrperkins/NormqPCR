@@ -58,9 +58,13 @@
 \seealso{\code{selectHKs}}
 \examples{
   data(Colon)
-  group <- pData(Colon.qPCRBatch)[,"Group"]
-  res.Colon <- stabMeasureRho(Colon.qPCRBatch, group = group,
-                            log = FALSE)
+  Class <- pData(Colon)[,"Classification"]
+  res.Colon <- stabMeasureRho(Colon, group = Class, log = FALSE)
   sort(res.Colon) # cf. Table 3 in Andersen et al (2004)
+  
+  data(Bladder)
+  Grade <- pData(Bladder)[,"Grade"]
+  res.Bladder <- stabMeasureRho(Bladder, group = Grade, log = FALSE)
+  sort(res.Bladder) # cf. Table 3 in Andersen et al (2004)
 }
 \keyword{data}
