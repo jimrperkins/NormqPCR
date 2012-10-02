@@ -5,15 +5,23 @@ note <- sprintf("R package version %s", meta$Version)
 
 citHeader("To cite package NormqPCR in publications use:")
 
-citEntry(entry="Manual",
-         title = "NormqPCR: Functions for normalisation of RT-qPCR data",
-         author = personList(as.person("M. Kohl"), as.person("J. Perkins")),
-         language = "English",
-         year = year,
-         note = note,
-         type = "R package",
-         url = "www.bioconductor.org/packages/release/bioc/html/NormqPCR.html",
-         textVersion = paste("Kohl, M. and Perkins, J.",
-                             sprintf("(%s).", year),
-                             "NormqPCR: Functions for normalisation of RT-qPCR data.",
-                             paste(note, ".", sep = "")))
+citEntry(entry="article",
+         title = "ReadqPCR and NormqPCR: R packages for the reading, quality checking and normalisation of RT-qPCR quantification cycle (Cq) data.",
+         author = personList( as.person("James R. Perkins"), 
+                              as.person("John M. Dawes"),
+                              as.person("Christine Orengo"),
+                              as.person("Stephen B. McMahon"),
+                              as.person("David L.H. Bennett"),
+                              as.person("Matthias Kohl")),
+         year = 2012,
+         journal = "BMC Genomics",
+         volume = "13",
+         pages = "296+",
+         doi = "10.1186/1471-2164-13-296",
+         url = "http://www.biomedcentral.com/1471-2164/13/296",
+         
+         textVersion = 
+         paste("James R. Perkins, John M. Dawes, Stephen B. McMahon, David L.H. Bennett, Christine Orengo and Matthias Kohl (2012):", 
+               "ReadqPCR and NormqPCR: R packages for the reading, quality checking and normalisation of RT-qPCR quantification cycle (Cq) data.",
+                "BMC Genomics 13:296+" ) )
+
