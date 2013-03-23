@@ -1,15 +1,17 @@
 Package: NormqPCR
-Version: 1.5.1
-Date: 2012-09-09
+Version: 1.5.2
+Date: 2013-03-23
 Title: Functions for normalisation of RT-qPCR data
 Description: Functions for the selection of optimal reference genes and the normalisation of real-time quantitative PCR data.
 Author: Matthias Kohl, James Perkins
 Maintainer: James Perkins <j.perkins@ucl.ac.uk>
-Depends: R(>= 2.14.0), stats, RColorBrewer, Biobase, methods, ReadqPCR
+Depends: R(>= 2.14.0), stats, RColorBrewer, Biobase, methods, ReadqPCR, qpcR
 Imports: ReadqPCR
 biocViews: MicrotitrePlateAssay, GeneExpression, qPCR
 License: LGPL-3
 LazyLoad: yes
 LazyData: yes
 URL: www.bioconductor.org/packages/release/bioc/html/NormqPCR.html
-Collate: allGenerics.R deltaCt.R selectHKs.R combineTechReps.R combineTechRepsWithSD.R deltaDeltaCt.R stabMeasureM.R dealWithNA.R geomMean.R stabMeasureRho.R CtToCqWrappers.R
+Collate: allGenerics.R deltaCt.R selectHKs.R combineTechReps.R combineTechRepsWithSD.R CqValues.R 
+         deltaDeltaCt.R stabMeasureM.R dealWithNA.R geomMean.R stabMeasureRho.R CtToCqWrappers.R
+         ComputeNRQs.R

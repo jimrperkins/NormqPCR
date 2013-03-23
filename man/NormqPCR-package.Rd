@@ -12,9 +12,11 @@ Functions for normalisation of real-time quantitative PCR data.
 \tabular{ll}{
 Package: \tab NormqPCR\cr
 Type: \tab Package\cr
-Version: \tab 1.3.2\cr
-Date: \tab 2012-09-08\cr
-Depends: \tab R(>= 2.14.0), stats, RColorBrewer, Biobase, methods, ReadqPCR \cr
+Version: \tab 1.5.2\cr
+Date: \tab 2013-03-23\cr
+Depends: \tab R(>= 2.14.0), stats, RColorBrewer, Biobase, methods, ReadqPCR, qpcR \cr
+Imports: \tab ReadqPCR \cr
+biocViews: \tab MicrotitrePlateAssay, GeneExpression, qPCR \cr
 License: \tab LGPL-3\cr
 LazyLoad: \tab yes \cr
 LazyData: \tab yes \cr
@@ -24,7 +26,7 @@ require(NormqPCR)
 }
 \author{ Matthias Kohl, James Perkins
 
-Maintainer: Matthias Kohl  \email{Matthias.Kohl@stamats.de}}
+Maintainer: James Perkins \email{j.perkins@ucl.ac.uk}}
 \references{
   Perkins, JR, Dawes, JM, McMahon, SB, Bennett, DL, Orengo, C, Kohl, M (2012). 
   ReadqPCR and NormqPCR: R packages for the reading, quality checking and 

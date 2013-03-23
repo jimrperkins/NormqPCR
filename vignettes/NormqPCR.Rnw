@@ -514,7 +514,38 @@ head(ddAvgCq.gM.taqman)
 
 
 TO SHOW EXAMPLE USING GENORM/NORMFINDER DATA
+%-------------------------------------------------------------------------------
+\subsection{Compute NRQs}
+%-------------------------------------------------------------------------------
+THIS FUNCTION IS STILL EXPERIMENTAL!
 
+We load a dataset including technical replicates.
+<<ComputeNRQs1>>=
+path <- system.file("exData", package = "ReadqPCR")
+qPCR.example <- file.path(path, "qPCR.example.txt")
+Cq.data <- read.qPCR(qPCR.example)
+@
+We combine the technical replicates and in addition compute standard deviations.
+<<ComputeNRQs2>>=
+Cq.data1 <- combineTechRepsWithSD(Cq.data)
+@
+We load efficiencies for the dataset and add them to the dataset.
+<<ComputeNRQs3>>=
+Effs <- file.path(path, "Efficiencies.txt")
+Cq.effs <- read.table(file = Effs, row.names = 1, header = TRUE)
+rownames(Cq.effs) <- featureNames(Cq.data1)
+effs(Cq.data1) <- as.matrix(Cq.effs[,"efficiency",drop = FALSE])
+se.effs(Cq.data1) <- as.matrix(Cq.effs[,"SD.efficiency",drop = FALSE])
+@
+Now we can compute normalized relative quantities for the dataset where we 
+consider two of the included features as reference/housekeeping genes.
+<<ComputeNRQs4>>=
+res <- ComputeNRQs(Cq.data1, hkgs = c("gene_az", "gene_gx"))
+## NRQs
+exprs(res)
+## SD of NRQs
+se.exprs(res)
+@
 %-------------------------------------------------------------------------------
 \begin{thebibliography}{1}
 
@@ -538,10 +569,15 @@ PCR and the $2^{\Delta \Delta Ct}$ Method.
 Jo Vandesompele, Katleen De Preter, Filip Pattyn, Bruce Poppe, Nadine Van Roy, 
 Anne De Paepe and Frank Speleman (2002).
 \newblock Accurate normalization of real-time quantitative RT-PCR data by
-geometric
-averiging of multiple internal control genes.
+geometric averiging of multiple internal control genes.
 \newblock Genome Biology 2002, 3(7):research0034.1-0034.11
 \newblock \url{http://genomebiology.com/2002/3/7/research/0034/}
+
+\bibitem{qBase}
+Jan Hellemans, Geert Mortier, Anne De Paepe, Frank Speleman and Jo Vandesompele (2007).
+\newblock qBase relative quantification framework and software for management and 
+automated analysis of real-time quantitative PCR data.
+\newblock Genome Biology 2007, 8:R19
 
 \end{thebibliography}
 %-------------------------------------------------------------------------------
