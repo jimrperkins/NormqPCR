@@ -24,7 +24,7 @@ LazyData: \tab yes \cr
 }
 require(NormqPCR)
 }
-\author{ Matthias Kohl, James Perkins
+\author{ Matthias Kohl, James Perkins, Nor Izayu Abdul Rahman
 
 Maintainer: James Perkins \email{j.perkins@ucl.ac.uk}}
 \references{

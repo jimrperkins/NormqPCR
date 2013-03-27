@@ -3,7 +3,7 @@ Version: 1.5.3
 Date: 2013-03-27
 Title: Functions for normalisation of RT-qPCR data
 Description: Functions for the selection of optimal reference genes and the normalisation of real-time quantitative PCR data.
-Author: Matthias Kohl, James Perkins
+Author: Matthias Kohl, James Perkins, Nor Izayu Abdul Rahman
 Maintainer: James Perkins <j.perkins@ucl.ac.uk>
 Depends: R(>= 2.14.0), stats, RColorBrewer, Biobase, methods, ReadqPCR, qpcR
 Imports: ReadqPCR
