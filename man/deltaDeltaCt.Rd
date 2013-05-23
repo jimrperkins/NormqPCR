@@ -61,7 +61,11 @@
   colnames(contM) <- c("interestingPhenotype","wildTypePhenotype")
   rownames(contM) <- sampleNames(qPCRBatch.taqman)
 
-  ddCq.taqman <- deltaDeltaCq(qPCRBatch = qPCRBatch.taqman, maxNACase=1, maxNAControl=1, hkg=hkg, contrastM=contM, case="interestingPhenotype", control="wildTypePhenotype", statCalc="geom", hkgCalc="arith")
+  ddCq.taqman <- deltaDeltaCq(qPCRBatch = qPCRBatch.taqman, maxNACase=1, 
+                              maxNAControl=1, hkg=hkg, contrastM=contM, 
+                              case="interestingPhenotype", 
+                              control="wildTypePhenotype", 
+                              statCalc="geom", hkgCalc="arith")
   head(ddCq.taqman)
 }
 \keyword{data}

@@ -1,6 +1,7 @@
 \name{selectHKs}
 \alias{selectHKs}
 \alias{selectHKs-methods}
+\alias{selectHKs,matrix-method}
 \alias{selectHKs,qPCRBatch-method}
 \title{ Selection of reference/housekeeping genes }
 \description{
@@ -10,11 +11,14 @@
 \usage{
 selectHKs(qPCRBatch, \dots)
 
+\S4method{selectHKs}{matrix}(qPCRBatch, group, method = "geNorm", minNrHKs = 2, log = TRUE, Symbols, 
+        trace = TRUE, na.rm = TRUE)
+
 \S4method{selectHKs}{qPCRBatch}(qPCRBatch, group, method = "geNorm", minNrHKs = 2, log = TRUE, Symbols, 
 	      trace = TRUE, na.rm = TRUE)
 }
 \arguments{
-  \item{qPCRBatch}{ qPCRBatch, containing the data (expression matrix) in the exprs slot }
+  \item{qPCRBatch}{ matrix or qPCRBatch, containing the data (expression matrix) in the exprs slot }
   \item{\dots}{ Extra arguments, detailed below }
   \item{group}{ optional factor not used by all methods, hence may be missing }
   \item{method}{ method to compute most stable genes }
@@ -79,9 +83,9 @@ selectHKs(qPCRBatch, \dots)
 \examples{
   data(geNorm)
   tissue <- as.factor(c(rep("BM", 9), rep("FIB", 20), rep("LEU", 13),
-    rep("NB", 34), rep("POOL", 9)))
-
-    res.BM <- selectHKs(geNorm.qPCRBatch[,tissue == "BM"], method = "geNorm", 
-  Symbols = featureNames(geNorm.qPCRBatch), minNrHK = 2, log = FALSE)
+                        rep("NB", 34), rep("POOL", 9)))
+  res.BM <- selectHKs(geNorm.qPCRBatch[,tissue == "BM"], method = "geNorm", 
+                      Symbols = featureNames(geNorm.qPCRBatch), minNrHK = 2, 
+                      log = FALSE)
 }
 \keyword{data}
