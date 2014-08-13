@@ -13,7 +13,7 @@ CqValues(object, ...)
                       model = l5, check = "uni2", checkPAR = parKOD(), 
                       remove = "none", exclude = NULL, type = "cpD2", 
                       labels = NULL, norm = FALSE, baseline = FALSE, 
-                      basefac = 1, smooth = "none", 
+                      basefac = 1, smooth = NULL, 
                       smoothPAR = list(span = 0.1), 
                       factor = 1, opt = FALSE, 
                       optPAR = list(sig.level = 0.05, crit = "ftest"), 

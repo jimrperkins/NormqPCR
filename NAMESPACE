@@ -1,4 +1,8 @@
 importClassesFrom(ReadqPCR, qPCRBatch)
+import(Biobase,
+       RColorBrewer,
+       methods,
+       qpcR)
 export(geomMean,
        stabMeasureM,
        stabMeasureRho,
