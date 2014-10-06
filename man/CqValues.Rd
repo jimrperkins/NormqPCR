@@ -12,7 +12,7 @@ CqValues(object, ...)
 \S4method{CqValues}{CyclesSet}(object, Effmethod = "expfit", group = NULL, 
                       model = l5, check = "uni2", checkPAR = parKOD(), 
                       remove = "none", exclude = NULL, type = "cpD2", 
-                      labels = NULL, norm = FALSE, baseline = FALSE, 
+                      labels = NULL, norm = FALSE, baseline = NULL, 
                       basefac = 1, smooth = NULL, 
                       smoothPAR = list(span = 0.1), 
                       factor = 1, opt = FALSE, 
