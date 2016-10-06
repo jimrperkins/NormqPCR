@@ -529,22 +529,22 @@ We combine the technical replicates and in addition compute standard deviations.
 <<ComputeNRQs2>>=
 Cq.data1 <- combineTechRepsWithSD(Cq.data)
 @
-We load efficiencies for the dataset and add them to the dataset.
+TO BE FIXED: We load efficiencies for the dataset and add them to the dataset.
 <<ComputeNRQs3>>=
 Effs <- file.path(path, "Efficiencies.txt")
 Cq.effs <- read.table(file = Effs, row.names = 1, header = TRUE)
 rownames(Cq.effs) <- featureNames(Cq.data1)
-effs(Cq.data1) <- as.matrix(Cq.effs[,"efficiency",drop = FALSE])
-se.effs(Cq.data1) <- as.matrix(Cq.effs[,"SD.efficiency",drop = FALSE])
+#effs(Cq.data1) <- as.matrix(Cq.effs[,"efficiency",drop = FALSE])
+#se.effs(Cq.data1) <- as.matrix(Cq.effs[,"SD.efficiency",drop = FALSE])
 @
 Now we can compute normalized relative quantities for the dataset where we 
 consider two of the included features as reference/housekeeping genes.
 <<ComputeNRQs4>>=
-res <- ComputeNRQs(Cq.data1, hkgs = c("gene_az", "gene_gx"))
+#res <- ComputeNRQs(Cq.data1, hkgs = c("gene_az", "gene_gx"))
 ## NRQs
-exprs(res)
+#exprs(res)
 ## SD of NRQs
-se.exprs(res)
+#se.exprs(res)
 @
 %-------------------------------------------------------------------------------
 \begin{thebibliography}{1}
