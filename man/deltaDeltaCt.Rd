@@ -48,7 +48,7 @@
   normalisation of RT-qPCR quantification cycle (Cq) data. 
   \emph{BMC Genomics}, \bold{13}, 1:296.
 }
-\author{ James Perkins \email{j.perkins@ucl.ac.uk}}
+\author{ James Perkins \email{jimrperkins@gmail.com}}
 %\note{}
 \seealso{\code{selectHKs}, \code{deltaCq}}
 \examples{

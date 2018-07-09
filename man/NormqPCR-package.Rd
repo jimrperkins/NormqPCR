@@ -26,7 +26,7 @@ require(NormqPCR)
 }
 \author{ Matthias Kohl, James Perkins, Nor Izayu Abdul Rahman
 
-Maintainer: James Perkins \email{j.perkins@ucl.ac.uk}}
+Maintainer: James Perkins \email{jimrperkins@gmail.com}}
 \references{
   Perkins, JR, Dawes, JM, McMahon, SB, Bennett, DL, Orengo, C, Kohl, M (2012). 
   ReadqPCR and NormqPCR: R packages for the reading, quality checking and 
