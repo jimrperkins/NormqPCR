@@ -39,7 +39,7 @@ pagecolor=darkblue,raiselinks,plainpages,pdftex]{hyperref}
 \title{NormqPCR: Functions for normalisation of RT-qPCR data}
 %-------------------------------------------------------------------------------
 \author{James Perkins and Matthias Kohl\\ 
-University College London (UK) / Furtwangen University (Germany)\medskip\\
+University of Malaga (Spain) / Furtwangen University (Germany)\medskip\\
 }
 \maketitle
 \tableofcontents

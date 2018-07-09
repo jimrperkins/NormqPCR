@@ -2,7 +2,9 @@ importClassesFrom(ReadqPCR, qPCRBatch)
 import(Biobase,
        RColorBrewer,
        methods,
-       qpcR)
+       qpcR,
+       ReadqPCR)
+importFrom("stats", "aggregate", "mad", "median", "sd")
 export(geomMean,
        stabMeasureM,
        stabMeasureRho,
