@@ -5,7 +5,7 @@
 
 setMethod("stabMeasureRho", signature(x = "matrix"), definition =
   function(x, group, log = TRUE, na.rm = TRUE, returnAll = FALSE){
-    if(class(x) == "qPCRBatch") {
+    if(is(x, "qPCRBatch")) {
         x <- t(exprs(x))
     }
 
